@@ -1,0 +1,48 @@
+// Enums
+export enum Player {
+  Cross = 0,
+  Circle = 1
+}
+
+export enum TileValue {
+  Cross = 0,
+  Circle = 1,
+  Empty = 2,
+  Destroyed = 3
+}
+
+export enum Winner {
+  Cross = 0,
+  Circle = 1,
+  None = 2,
+  Draw = 3
+}
+
+// Interfaces
+export interface Point {
+  readonly x: number;
+  readonly y: number;
+}
+
+export interface Move {
+  boardPosition: Point;
+  tilePosition: Point;
+}
+
+export interface TileInformation {
+  position: Point;
+  value: TileValue;
+}
+
+export interface SmallBoardInformation extends TileInformation {
+  tiles: SmallTileInformation[];
+}
+
+export interface SmallTileInformation extends TileInformation {
+  boardPosition: Point;
+}
+
+export interface WinResult {
+  isFinished: boolean;
+  winningPlayer: Winner;
+}

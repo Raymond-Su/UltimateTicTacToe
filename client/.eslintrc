@@ -35,8 +35,10 @@
   },
   "rules": {
     "comma-dangle": "off",
+    "@typescript-eslint/comma-dangle": "error",
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/ban-ts-comment": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "warn"
+    "@typescript-eslint/explicit-module-boundary-types": "warn",
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }
