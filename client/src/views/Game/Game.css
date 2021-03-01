@@ -208,6 +208,7 @@ label {
   font-size: calc(40px + 5vw);
   font-weight: 100;
   border: 2px solid transparent;
+  min-width: calc(42px + 10vw);
 }
 
 .smallBoard::before {

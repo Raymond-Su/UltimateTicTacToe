@@ -2,7 +2,7 @@ import React, { FC, useCallback } from 'react';
 import classNames from 'classnames';
 
 import './Game.css';
-import { TileValue } from '../../types/game';
+import { TileValue, Winner } from '../../types/game';
 import { useAppState } from '../../context/AppContext';
 import { GameAction } from '../../types/gameDisplay';
 import { displayTileValue } from '../../utils/gameEngine';
@@ -24,6 +24,18 @@ const Game: FC = () => {
       ],
     [state.game]
   );
+
+  const renderTitle = () => {
+    if (!state.game.getWinResult().isFinished) {
+      return state.game.getMoves().length === 0
+        ? 'Click a square to start'
+        : `${displayTileValue[state.game.getCurrentPlayer()]}'s Turn`;
+    }
+
+    return state.game.getWinResult().winningPlayer === Winner.Draw
+      ? 'Draw'
+      : `${displayTileValue[state.game.getWinResult().winningPlayer]} Won`;
+  };
 
   return (
     <div className="container">
@@ -104,15 +116,7 @@ const Game: FC = () => {
           <div className="panel panel-default">
             <div className="panel-heading">
               <h1 id="game-caption" className="panel-title">
-                {!state.game.getWinResult().isFinished
-                  ? state.game.getMoves().length === 0
-                    ? 'Click a square to start'
-                    : `${
-                        displayTileValue[state.game.getCurrentPlayer()]
-                      }'s Turn`
-                  : `${
-                      displayTileValue[state.game.getWinResult().winningPlayer]
-                    } Won`}
+                {renderTitle()}
               </h1>
             </div>
             <div className="panel-body">
