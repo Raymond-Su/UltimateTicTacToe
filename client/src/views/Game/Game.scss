@@ -2,34 +2,36 @@
 * {
   box-sizing: border-box;
 }
+
 .container {
   width: 100%;
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
   margin-left: auto;
-}
-.container::before {
-  box-sizing: border-box;
-}
-.panel {
-  margin-bottom: 20px;
-  background-color: #fff;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
-  box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+
+  &::before {
+    box-sizing: border-box;
+  }
+  .panel {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+    box-shadow: 0 1px 1px rgb(0 0 0 / 5%);
+  }
 }
 
 .panel-body {
   padding: 15px;
-}
-.panel-body:before {
-  display: table;
-  content: ' ';
-}
-.panel-body:after {
-  clear: both;
+  &::before {
+    display: table;
+    content: ' ';
+  }
+  &::after {
+    clear: both;
+  }
 }
 
 .panel-heading {
@@ -41,48 +43,38 @@
 
 .panel-default {
   border-color: #ddd;
-}
 
-.panel-default > .panel-heading {
-  color: #333;
-  background-color: #f5f5f5;
-  border-color: #ddd;
-}
+  > .panel-heading {
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+  }
 
-.panel-title {
-  margin-top: 0;
-  margin-bottom: 0;
-  font-size: 16px;
-  color: inherit;
+  .panel-title {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 16px;
+    color: inherit;
+  }
+
+  .row {
+    margin-right: -15px;
+    margin-left: -15px;
+  }
 }
 
 .row {
   margin-right: -15px;
   margin-left: -15px;
-}
 
-.row:before,
-.row:after {
-  display: table;
-  content: ' ';
-  box-sizing: border-box;
-}
-.row:after {
-  clear: both;
-}
-
-.alert-info {
-  color: #0c5460;
-  background-color: #d1ecf1;
-  border-color: #bee5eb;
-}
-
-.alert {
-  position: relative;
-  padding: 0.75rem 1.25rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
+  &::before {
+    display: table;
+    content: ' ';
+    box-sizing: border-box;
+  }
+  &::after {
+    clear: both;
+  }
 }
 
 .col-md-4,
@@ -182,5 +174,3 @@ label {
   background-color: #337ab7;
   border-color: #2e6da4;
 }
-
-/* ------------------------ */

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 
 import './Game.scss';
 import { Winner } from '../../types/game';
@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 import Board from '../../components/Board';
 const Game: FC = () => {
   const game = useStateValue();
+  const [gameMode, setGameMode] = useState('computer');
   const renderTitle = () => {
     if (!game.getWinResult.isFinished) {
       return game.getMoves.length === 0
@@ -40,42 +41,48 @@ const Game: FC = () => {
           </div>
         </div>
         <div className="col-md-4 col-md-push-8">
-          <div
-            id="player-display"
-            className="alert alert-info"
-            role="alert"
-            style={{ display: 'none' }}
-          />
           <div className="panel panel-default">
+            <div className="panel-heading">
+              <h2 className="panel-title">Game Configuration</h2>
+            </div>
             <div className="panel-body">
               <form>
-                {/* <div className="form-group">
+                <div className="form-group">
                   <label htmlFor="opponent">Opponent</label>
-                  <select className="form-control" id="opponent">
+                  <select
+                    className="form-control"
+                    id="opponent"
+                    value={gameMode}
+                    onChange={(e) => setGameMode(e.target.value)}
+                  >
                     <option value="friend">Play with friend</option>
                     <option value="computer">Play against computer</option>
                   </select>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="first">Who goes first</label>
-                  <select className="form-control" id="first">
-                    <option value="player">Player</option>
-                    <option value="computer">Computer</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="difficulty">Difficulty</label>
-                  <select id="difficulty" className="form-control">
-                    <option value="1">Piece of cake</option>
-                    <option value="2">Medium</option>
-                    <option value="3">Hard</option>
-                    <option value="4">Very hard</option>
-                    <option value="5">Extremely hard</option>
-                    <option value="6">Expert</option>
-                    <option value="7">Grandmaster</option>
-                    <option value="8">Impossible</option>
-                  </select>
-                </div> */}
+                {gameMode !== 'friend' && (
+                  <>
+                    <div className="form-group">
+                      <label htmlFor="first">Who goes first</label>
+                      <select className="form-control" id="first">
+                        <option value="player">Player</option>
+                        <option value="computer">Computer</option>
+                      </select>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="difficulty">Difficulty</label>
+                      <select id="difficulty" className="form-control">
+                        <option value="1">Piece of cake</option>
+                        <option value="2">Medium</option>
+                        <option value="3">Hard</option>
+                        <option value="4">Very hard</option>
+                        <option value="5">Extremely hard</option>
+                        <option value="6">Expert</option>
+                        <option value="7">Grandmaster</option>
+                        <option value="8">Impossible</option>
+                      </select>
+                    </div>
+                  </>
+                )}
                 <button
                   type="button"
                   id="new-game"
@@ -87,29 +94,31 @@ const Game: FC = () => {
               </form>
             </div>
           </div>
-          <div className="panel panel-default hidden-xs hidden-sm">
-            <div className="panel-heading">
-              <h2 className="panel-title">History</h2>
-            </div>
-            <table className="table" id="history-table">
-              <thead>
-                <tr className="table-row">
-                  <th scope="col">Turn</th>
-                  <th scope="col">Player</th>
-                  <th scope="col">Location</th>
-                </tr>
-              </thead>
-              <tbody>
-                {game.getMoves.map((move, index) => (
-                  <tr key={`move-${index}`} className="table-row">
-                    <td>{index + 1}</td>
-                    <td>{index % 2 ? 'O' : 'X'}</td>
-                    <td>{`(${move.boardPosition.x},${move.boardPosition.y}) (${move.tilePosition.x},${move.tilePosition.y})`}</td>
+          {game.getMoves.length !== 0 && (
+            <div className="panel panel-default hidden-xs hidden-sm">
+              <div className="panel-heading">
+                <h2 className="panel-title">History</h2>
+              </div>
+              <table className="table" id="history-table">
+                <thead>
+                  <tr className="table-row">
+                    <th scope="col">Turn</th>
+                    <th scope="col">Player</th>
+                    <th scope="col">Location</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {game.getMoves.map((move, index) => (
+                    <tr key={`move-${index}`} className="table-row">
+                      <td>{index + 1}</td>
+                      <td>{index % 2 ? 'O' : 'X'}</td>
+                      <td>{`(${move.boardPosition.x},${move.boardPosition.y}) (${move.tilePosition.x},${move.tilePosition.y})`}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

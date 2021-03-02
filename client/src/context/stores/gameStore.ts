@@ -54,7 +54,6 @@ class GameStore {
   }
 
   applyMove(move: Move): boolean {
-    console.log('moveApplied');
     const boardToChange = this.board.find((board) =>
       arePointsEqual(board.position, move.boardPosition)
     );
