@@ -95,7 +95,7 @@
 
 @media (min-width: 992px) {
   .container {
-    width: 970px;
+    min-width: 970px;
   }
 
   .col-md-4 {
