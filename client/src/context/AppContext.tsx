@@ -1,36 +1,18 @@
-import React, {
-  createContext,
-  FC,
-  ReactNode,
-  useReducer,
-  useMemo,
-  Dispatch,
-  useContext
-} from 'react';
-import { AppState, StateAction } from '../types/context';
-import { AppReducer, initialState } from './reducer';
+import React, { createContext, FC, ReactNode, useContext } from 'react';
+import GameStore from './stores/gameStore';
 
-const AppContext = createContext<[AppState, Dispatch<StateAction>]>([
-  initialState,
-  () => null
-]);
+const AppContext = createContext<GameStore>({} as GameStore);
 
 interface AppContextProviderProps {
   children: ReactNode;
 }
 
-const AppContextProvider: FC<AppContextProviderProps> = ({
+const StateProvider: FC<AppContextProviderProps> = ({
   children
-}: AppContextProviderProps) => {
-  const [state, dispatch] = useReducer(AppReducer, initialState);
-  const value: [AppState, Dispatch<StateAction>] = useMemo(
-    () => [state, dispatch],
-    [state]
-  );
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
-};
+}: AppContextProviderProps) => (
+  <AppContext.Provider value={new GameStore()}>{children}</AppContext.Provider>
+);
 
-export const useAppState = (): [AppState, Dispatch<StateAction>] =>
-  useContext(AppContext);
+export const useStateValue = (): GameStore => useContext(AppContext);
 
-export default AppContextProvider;
+export default StateProvider;

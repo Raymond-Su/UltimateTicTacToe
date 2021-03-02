@@ -1,15 +1,15 @@
+import { makeAutoObservable } from 'mobx';
 import {
   Point,
   Move,
   Player,
-  SmallBoardInformation,
-  SmallTileInformation,
+  innerBoardInformation,
+  SquareInformation,
   TileInformation,
   TileValue,
   Winner,
   WinResult
-} from '../types/game';
-import { immerable } from 'immer';
+} from '../../types/game';
 
 export const displayTileValue: Record<TileValue | Player, string> = {
   [TileValue.Cross]: 'X',
@@ -20,9 +20,9 @@ export const displayTileValue: Record<TileValue | Player, string> = {
 
 export const playerToTileValue = (
   player: Winner | Player,
-  isForFullSmallBoard = false
+  isForFullInnerBoard = false
 ): TileValue => {
-  if (isForFullSmallBoard && player === Winner.Draw) {
+  if (isForFullInnerBoard && player === Winner.Draw) {
     return TileValue.Destroyed;
   } else if (player === Winner.Cross) {
     return TileValue.Cross;
@@ -40,20 +40,21 @@ const arePointsEqual = (point1: Point, point2: Point): boolean => {
   return false;
 };
 
-class TicTacToeGame {
-  [immerable] = true;
-  private board: SmallBoardInformation[];
+class GameStore {
+  private board: innerBoardInformation[];
   private moves: Move[];
   private currentPlayer: Player;
 
   constructor(moves: Move[] = []) {
-    this.board = this.getInitialSmallBoards();
+    this.board = this.getInitialInnerBoards();
     this.currentPlayer = Player.Cross;
     this.moves = [];
     this.applyMoves(moves);
+    makeAutoObservable(this);
   }
 
   applyMove(move: Move): boolean {
+    console.log('moveApplied');
     const boardToChange = this.board.find((board) =>
       arePointsEqual(board.position, move.boardPosition)
     );
@@ -82,44 +83,11 @@ class TicTacToeGame {
     return true;
   }
 
-  private validMove(
-    move: Move,
-    boardToChange: SmallBoardInformation,
-    tileToChange: SmallTileInformation
-  ): boolean {
-    if (this.moves.length === 0) return true;
-
-    let isValidMove = false;
-    // Check last move to determine valid small board position
-    const lastBoard = this.board.find((board) =>
-      arePointsEqual(
-        board.position,
-        this.moves[this.moves.length - 1].tilePosition
-      )
-    );
-
-    // Check if smallboard is filled or is valid.
-    if (
-      lastBoard &&
-      (lastBoard.value != TileValue.Empty ||
-        arePointsEqual(lastBoard.position, move.boardPosition))
-    ) {
-      // Check if tile or board is not filled
-      if (
-        boardToChange.value === TileValue.Empty &&
-        tileToChange.value === TileValue.Empty
-      ) {
-        isValidMove = true;
-      }
-    }
-    return isValidMove;
-  }
-
   applyMoves(moves: Move[]): boolean[] {
     return moves.map((move) => this.applyMove(move));
   }
 
-  getWinResultForSmallBoard(boardPosition: Point): WinResult {
+  getWinResultForInnerBoard(boardPosition: Point): WinResult {
     const affectedBoard = this.board.find((board) =>
       arePointsEqual(board.position, boardPosition)
     );
@@ -127,8 +95,13 @@ class TicTacToeGame {
       affectedBoard ? affectedBoard.tiles : []
     );
   }
+  restart(): void {
+    this.moves = [];
+    this.board = this.getInitialInnerBoards();
+    this.currentPlayer = Player.Cross;
+  }
 
-  getCurrentActiveBoards(): Point[] {
+  get getCurrentActiveBoards(): Point[] {
     if (this.moves.length === 0) {
       const allBoards: Point[] = [];
 
@@ -141,49 +114,49 @@ class TicTacToeGame {
       return allBoards;
     }
 
-    if (this.getWinResult().isFinished) {
+    if (this.getWinResult.isFinished) {
       return [];
     }
 
     const lastMove = this.moves[this.moves.length - 1].tilePosition;
     let activeBoards = [lastMove];
     const boardLastMovePointsTo = this.board.find(
-      (board: SmallBoardInformation) => arePointsEqual(board.position, lastMove)
+      (board: innerBoardInformation) => arePointsEqual(board.position, lastMove)
     );
     if (
       boardLastMovePointsTo &&
       boardLastMovePointsTo.value !== TileValue.Empty
     ) {
       const allUnfinishedBoards = this.board.filter(
-        (board: SmallBoardInformation) => board.value === TileValue.Empty
+        (board: innerBoardInformation) => board.value === TileValue.Empty
       );
       activeBoards = allUnfinishedBoards.map(
-        (board: SmallBoardInformation) => board.position
+        (board: innerBoardInformation) => board.position
       );
     }
 
     return activeBoards;
   }
 
-  getWinResult(): WinResult {
+  get getWinResult(): WinResult {
     return this.getWinResultForGivenBoard(this.board);
   }
 
-  getCurrentPlayer(): Player {
+  get getCurrentPlayer(): Player {
     return this.currentPlayer;
   }
 
-  getMoves(): Move[] {
+  get getMoves(): Move[] {
     return this.moves;
   }
 
-  getBoard(): SmallBoardInformation[] {
+  get getBoard(): innerBoardInformation[] {
     return this.board;
   }
 
-  private getInitialSmallBoards() {
-    const getInitialTilesOfSmallBoard = (boardPosition: Point) => {
-      const tiles: SmallTileInformation[] = [];
+  private getInitialInnerBoards() {
+    const getInitialTilesOfInnerBoard = (boardPosition: Point) => {
+      const tiles: SquareInformation[] = [];
       for (let x = 0; x < 3; x++) {
         for (let y = 0; y < 3; y++) {
           tiles.push({
@@ -196,17 +169,17 @@ class TicTacToeGame {
       return tiles;
     };
 
-    const smallBoards: SmallBoardInformation[] = [];
+    const innerBoards: innerBoardInformation[] = [];
     for (let x = 0; x < 3; x++) {
       for (let y = 0; y < 3; y++) {
-        smallBoards.push({
+        innerBoards.push({
           value: TileValue.Empty,
           position: { x, y },
-          tiles: getInitialTilesOfSmallBoard({ x, y })
+          tiles: getInitialTilesOfInnerBoard({ x, y })
         });
       }
     }
-    return smallBoards;
+    return innerBoards;
   }
 
   private changePlayer() {
@@ -300,6 +273,39 @@ class TicTacToeGame {
       };
     }
   };
+
+  private validMove(
+    move: Move,
+    boardToChange: innerBoardInformation,
+    tileToChange: SquareInformation
+  ): boolean {
+    if (this.moves.length === 0) return true;
+
+    let isValidMove = false;
+    // Check last move to determine valid small board position
+    const lastBoard = this.board.find((board) =>
+      arePointsEqual(
+        board.position,
+        this.moves[this.moves.length - 1].tilePosition
+      )
+    );
+
+    // Check if innerBoard is filled or is valid.
+    if (
+      lastBoard &&
+      (lastBoard.value != TileValue.Empty ||
+        arePointsEqual(lastBoard.position, move.boardPosition))
+    ) {
+      // Check if tile or board is not filled
+      if (
+        boardToChange.value === TileValue.Empty &&
+        tileToChange.value === TileValue.Empty
+      ) {
+        isValidMove = true;
+      }
+    }
+    return isValidMove;
+  }
 }
 
-export default TicTacToeGame;
+export default GameStore;

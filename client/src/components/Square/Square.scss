@@ -1,0 +1,50 @@
+.cell {
+  width: calc(14px + 2.5vw);
+  height: calc(14px + 2.5vw);
+  font-size: calc(11px + 1.1vw);
+  font-weight: 300;
+
+  @media (max-width: 992px) {
+    font-weight: 400;
+  }
+
+  @media (max-width: 768px) {
+    font-weight: 500;
+  }
+
+  &.W,
+  &.SW,
+  &.S,
+  &.SE {
+    border-top: 2px solid gray;
+  }
+
+  &.NW,
+  &.N,
+  &.NE,
+  &.W,
+  &.E {
+    border-bottom: 2px solid gray;
+  }
+
+  &.N,
+  &.NE,
+  &.E,
+  &.S,
+  &.SE {
+    border-left: 2px solid gray;
+  }
+
+  &.NW,
+  &.N,
+  &.W,
+  &.SW,
+  &.S {
+    border-right: 2px solid gray;
+  }
+
+  &.enabled:hover {
+    cursor: pointer;
+    background-color: silver;
+  }
+}

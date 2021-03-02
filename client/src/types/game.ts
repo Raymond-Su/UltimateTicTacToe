@@ -34,11 +34,11 @@ export interface TileInformation {
   value: TileValue;
 }
 
-export interface SmallBoardInformation extends TileInformation {
-  tiles: SmallTileInformation[];
+export interface innerBoardInformation extends TileInformation {
+  tiles: SquareInformation[];
 }
 
-export interface SmallTileInformation extends TileInformation {
+export interface SquareInformation extends TileInformation {
   boardPosition: Point;
 }
 

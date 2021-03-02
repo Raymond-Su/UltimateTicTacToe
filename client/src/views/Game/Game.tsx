@@ -1,45 +1,44 @@
-import React, { FC, useCallback } from 'react';
-import classNames from 'classnames';
+import React, { FC } from 'react';
 
-import './Game.css';
-import { TileValue, Winner } from '../../types/game';
-import { useAppState } from '../../context/AppContext';
-import { GameAction } from '../../types/gameDisplay';
-import { displayTileValue } from '../../utils/gameEngine';
+import './Game.scss';
+import { Winner } from '../../types/game';
+import { useStateValue } from '../../context/AppContext';
+import { displayTileValue } from '../../context/stores/gameStore';
+import { observer } from 'mobx-react-lite';
+import Board from '../../components/Board';
 const Game: FC = () => {
-  const [state, dispatch] = useAppState();
-
-  const isActiveBoard = useCallback(
-    (boardRow, boardCol) =>
-      state.game
-        .getCurrentActiveBoards()
-        .some((board) => board.x == boardRow && board.y == boardCol),
-    [state.game]
-  );
-
-  const getTileValue = useCallback(
-    (boardRow, boardCol, tileRow, tileCol) =>
-      state.game.getBoard()[boardRow * 3 + boardCol].tiles[
-        tileRow * 3 + tileCol
-      ],
-    [state.game]
-  );
-
+  const game = useStateValue();
   const renderTitle = () => {
-    if (!state.game.getWinResult().isFinished) {
-      return state.game.getMoves().length === 0
+    if (!game.getWinResult.isFinished) {
+      return game.getMoves.length === 0
         ? 'Click a square to start'
-        : `${displayTileValue[state.game.getCurrentPlayer()]}'s Turn`;
+        : `${displayTileValue[game.getCurrentPlayer]}'s Turn`;
     }
 
-    return state.game.getWinResult().winningPlayer === Winner.Draw
+    return game.getWinResult.winningPlayer === Winner.Draw
       ? 'Draw'
-      : `${displayTileValue[state.game.getWinResult().winningPlayer]} Won`;
+      : `${displayTileValue[game.getWinResult.winningPlayer]} Won`;
   };
 
   return (
     <div className="container">
       <div className="row">
+        <div className="col-md-8 col-md-pull-4">
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              <h1 id="game-caption" className="panel-title">
+                {renderTitle()}
+              </h1>
+            </div>
+            <Board
+              newGame={game.getMoves.length === 0}
+              isFinished={game.getWinResult.isFinished}
+              board={game.getBoard}
+              activeInnerBoards={game.getCurrentActiveBoards}
+              makeMove={(move) => game.applyMove(move)}
+            />
+          </div>
+        </div>
         <div className="col-md-4 col-md-push-8">
           <div
             id="player-display"
@@ -81,7 +80,7 @@ const Game: FC = () => {
                   type="button"
                   id="new-game"
                   className="btn btn-primary"
-                  onClick={() => dispatch({ type: GameAction.RESTART })}
+                  onClick={() => game.restart()}
                 >
                   New game
                 </button>
@@ -101,7 +100,7 @@ const Game: FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {state.game.getMoves().map((move, index) => (
+                {game.getMoves.map((move, index) => (
                   <tr key={`move-${index}`} className="table-row">
                     <td>{index + 1}</td>
                     <td>{index % 2 ? 'O' : 'X'}</td>
@@ -112,128 +111,9 @@ const Game: FC = () => {
             </table>
           </div>
         </div>
-        <div className="col-md-8 col-md-pull-4">
-          <div className="panel panel-default">
-            <div className="panel-heading">
-              <h1 id="game-caption" className="panel-title">
-                {renderTitle()}
-              </h1>
-            </div>
-            <div className="panel-body">
-              <div
-                id="game"
-                className={classNames({
-                  disabled: state.game.getWinResult().isFinished
-                })}
-              >
-                <table>
-                  <tbody>
-                    {[0, 1, 2].map((boardRowIndex) => (
-                      <tr key={`board-col-${boardRowIndex}`}>
-                        {[0, 1, 2].map((boardColIndex) =>
-                          !state.game.getWinResultForSmallBoard({
-                            x: boardRowIndex,
-                            y: boardColIndex
-                          }).isFinished ? (
-                            <td
-                              key={`board-col-${boardColIndex}`}
-                              className={classNames('smallBoard', {
-                                enabled:
-                                  state.game.getMoves().length > 0 &&
-                                  isActiveBoard(boardRowIndex, boardColIndex)
-                              })}
-                            >
-                              <table>
-                                <tbody>
-                                  {['N', '', 'S'].map(
-                                    (rowPosition, tileRowIndex) => (
-                                      <tr key={`tile-row-${rowPosition}`}>
-                                        {['W', '', 'E'].map(
-                                          (colPosition, tileColIndex) => (
-                                            <td
-                                              key={`tile-col-${colPosition}`}
-                                              className={classNames(
-                                                `cell ${rowPosition}${colPosition}`,
-                                                {
-                                                  enabled:
-                                                    isActiveBoard(
-                                                      boardRowIndex,
-                                                      boardColIndex
-                                                    ) &&
-                                                    getTileValue(
-                                                      boardRowIndex,
-                                                      boardColIndex,
-                                                      tileRowIndex,
-                                                      tileColIndex
-                                                    ).value === TileValue.Empty
-                                                }
-                                              )}
-                                              onClick={() =>
-                                                dispatch({
-                                                  type: GameAction.MOVE,
-                                                  payload: {
-                                                    boardPosition: {
-                                                      x: boardRowIndex,
-                                                      y: boardColIndex
-                                                    },
-                                                    tilePosition: {
-                                                      x: tileRowIndex,
-                                                      y: tileColIndex
-                                                    }
-                                                  }
-                                                })
-                                              }
-                                            >
-                                              {getTileValue(
-                                                boardRowIndex,
-                                                boardColIndex,
-                                                tileRowIndex,
-                                                tileColIndex
-                                              ).value === TileValue.Cross &&
-                                                'X'}
-                                              {getTileValue(
-                                                boardRowIndex,
-                                                boardColIndex,
-                                                tileRowIndex,
-                                                tileColIndex
-                                              ).value === TileValue.Circle &&
-                                                'O'}
-                                            </td>
-                                          )
-                                        )}
-                                      </tr>
-                                    )
-                                  )}
-                                </tbody>
-                              </table>
-                            </td>
-                          ) : (
-                            <td
-                              key={`board-col-${boardColIndex}`}
-                              className="smallBoard"
-                            >
-                              {
-                                displayTileValue[
-                                  state.game.getWinResultForSmallBoard({
-                                    x: boardRowIndex,
-                                    y: boardColIndex
-                                  }).winningPlayer
-                                ]
-                              }
-                            </td>
-                          )
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
 };
 
-export default Game;
+export default observer(Game);
