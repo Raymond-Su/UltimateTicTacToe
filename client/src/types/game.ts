@@ -1,4 +1,18 @@
 // Enums
+export enum Opponent {
+  Player = 'player',
+  AI = 'ai'
+}
+
+export enum AIDifficulty {
+  Easy,
+  Medium,
+  Hard,
+  Expert,
+  Grandmaster,
+  Impossible
+}
+
 export enum Player {
   Cross = 0,
   Circle = 1

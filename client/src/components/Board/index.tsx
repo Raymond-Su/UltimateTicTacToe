@@ -1,9 +1,8 @@
 import React, { FC } from 'react';
 import classNames from 'classnames';
-
-import './Board.scss';
 import { Move, Point, innerBoardInformation } from '../../types/game';
 import InnerBoard from '../InnerBoard';
+import './Board.scss';
 
 interface BoardProps {
   isFinished: boolean;
@@ -28,7 +27,7 @@ const Board: FC<BoardProps> = ({
         disabled: isFinished
       })}
     >
-      <table className="innerBoard">
+      <table className="innerboard-table">
         <tbody>
           {[0, 1, 2].map((row) => (
             <tr key={`InnerBoard-row-${row}`}>
