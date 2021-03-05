@@ -1,0 +1,133 @@
+/* header */
+.header {
+  background-color: #fff;
+  max-width: 100%;
+  padding: 15px 20px;
+  margin: 0px auto;
+
+  .grey-color {
+    color: #868e96;
+  }
+
+  .logo {
+    display: block;
+    flex: none;
+    float: left;
+    font-size: 2em;
+    text-decoration: none;
+    margin-top: 10px;
+    line-height: normal;
+    align-self: baseline;
+  }
+  .logo-name {
+    font-family: 'Hammersmith One', sans-serif;
+    font-weight: bold;
+    font-variant-ligatures: no-common-ligatures;
+    -webkit-font-variant-ligatures: no-common-ligatures;
+    padding: 20px 10px;
+
+    &:hover {
+      color: black;
+    }
+  }
+
+  .menu-icon {
+    cursor: pointer;
+    display: inline-block;
+    padding: 28px 20px;
+    position: relative;
+    user-select: none;
+    float: right;
+
+    .navicon {
+      background: #333;
+      display: block;
+      height: 2px;
+      position: relative;
+      transition: background 0.2s ease-out;
+      width: 18px;
+
+      &::before,
+      &::after {
+        background: #333;
+        content: '';
+        display: block;
+        height: 100%;
+        position: absolute;
+        transition: all 0.2s ease-out;
+        width: 100%;
+      }
+
+      &::before {
+        top: 5px;
+      }
+
+      &::after {
+        top: -5px;
+      }
+    }
+  }
+
+  .menu {
+    clear: both;
+    max-height: 0;
+    transition: max-height 0.2s ease-out;
+
+    a {
+      font-size: 1.2em;
+      display: block;
+      padding: 15px 20px;
+      color: black;
+      text-decoration: none;
+
+      &:hover {
+        background-color: #f4f4f4;
+      }
+    }
+  }
+}
+
+.show-menu-toggle {
+  .menu {
+    max-height: 486px;
+  }
+
+  .menu-icon {
+    .navicon {
+      background: transparent;
+      &::before {
+        transform: rotate(-45deg);
+      }
+      &::after {
+        transform: rotate(45deg);
+      }
+    }
+    &:not(.steps) {
+      .navicon::before,
+      .navicon::after {
+        top: 0;
+      }
+    }
+  }
+}
+
+/* 48em = 768px */
+@media (min-width: 48em) {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .menu {
+      max-height: none;
+      display: flex;
+    }
+    .menu-icon {
+      display: none;
+    }
+  }
+}
+@media (max-width: 960px) and (min-width: 768px) {
+  .header {
+    font-size: 12px;
+  }
+}

@@ -8,6 +8,9 @@ import { Server, Socket } from 'socket.io';
 
 import { routes } from './routes';
 import { ResponseError } from './types';
+import { doesNotMatch } from 'node:assert';
+import { SocketServer } from './service/SocketServer';
+import { LoggerService } from './service/LoggerService';
 
 const app = express();
 app.use(urlencoded({ extended: true }));
@@ -41,71 +44,37 @@ app.use((error: ResponseError, req: express.Request, res: express.Response) => {
 });
 
 //  IO Server
-const server = createServer(app);
-const io = new Server(server, {
+const httpServer = createServer(app);
+const ioServer = new Server(httpServer, {
+  pingTimeout: 200000,
+  pingInterval: 300000,
   cors: {
     origin: 'http://localhost:3000'
   }
 });
 
-io.on('connection', (socket: Socket) => {
-  console.log('New client connected', socket.id);
-  console.log(io.sockets.adapter.rooms);
+/**
+ * Starts the server.
+ * @param done The callback executes after the server is started.
+ */
+export function startServer(port: string | number) {
+  httpServer.listen(port, () => {
+    LoggerService.log(
+      'Server Started:',
+      `Server started and listening at port ${port}`
+    );
+  });
 
-  if (socket.handshake.headers.referer) {
-    const referer = socket.handshake.headers.referer.split('/');
-    const rand = referer[referer.length - 1];
+  const ioHandlers = new SocketServer(ioServer);
+  ioHandlers.watchConnection();
+}
 
-    socket.join(rand);
-
-    const room = io.sockets.adapter.rooms.get(rand);
-    if (room) {
-      if (room.size === 1) {
-        socket.emit('joinGame', 'X');
-      } else if (room.size === 2) {
-        socket.emit('joinGame', 'O');
-      } else {
-        socket.emit('spectate');
-      }
-    }
-  }
-
-  // var room = io.adapter.rooms[rand];
-  // if (!room.game) {
-  //   room.game = {
-  //     players: [],
-  //     history: []
-  //   };
-  // }
-  // if (room.game.players.length === 0) {
-  //   if (Math.random() < 0.5) {
-  //     socket.player = 'X';
-  //   } else {
-  //     socket.player = 'O';
-  //   }
-  // } else if (room.game.players.indexOf('X') === -1) {
-  //   socket.player = 'X';
-  // } else if (room.game.players.indexOf('O') === -1) {
-  //   socket.player = 'O';
-  // } else {
-  //   socket.player = null;
-  // }
-  // if (socket.player) {
-  //   room.game.players.push(socket.player);
-  // }
-  // socket.emit('connection', socket.player, room);
-  // io.to(rand).emit('someone connected', room);
-  // socket.on('move', function (move) {
-  //   room.game.history.push(move);
-  //   socket.broadcast.to(rand).emit('move', move);
-  // });
-  // socket.on('disconnect', function () {
-  //   if (socket.player) {
-  //     var i = room.game.players.indexOf(socket.player);
-  //     room.game.players.splice(i, 1);
-  //   }
-  //   io.to(rand).emit('someone disconnected', room);
-  // });
-});
-
-export default server;
+/**
+ * Stops the server.
+ * @param done The callback executes after the server is stopped.
+ */
+export function stopServer() {
+  ioServer.close(() => {
+    httpServer.close();
+  });
+}

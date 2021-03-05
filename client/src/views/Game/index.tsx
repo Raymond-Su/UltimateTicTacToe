@@ -52,7 +52,7 @@ const Game: FC = () => {
       </div>
       <div className="col-4 col-push-8">
         <Panel>
-          <PanelHeading>Game Configuration</PanelHeading>
+          <PanelHeading>Local Game</PanelHeading>
           <PanelBody>
             <SelectForm
               id="Opponent"
