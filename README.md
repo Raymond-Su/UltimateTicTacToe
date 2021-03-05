@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/Raymond-Su/elementRotator/blob/master/src/icons/icon-128.png" width="75" height="75"/>
+  <img src="https://github.com/Raymond-Su/elementRotator/blob/master/src/icons/icon-128.png" width="80" height="80"/>
 </p>
 
 <h1 align="center">Ultimate Tic Tac Toe</h1>
