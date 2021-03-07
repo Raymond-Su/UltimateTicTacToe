@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-# Build client dependancies and dist
 CWD=$(pwd)
+
+# Build client dependancies and dist
 cd $CWD/client 
 npm install
 npm run build
