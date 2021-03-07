@@ -4,7 +4,7 @@
 
 <h1 align="center">Ultimate Tic Tac Toe</h1>
 
-<p align="center"><i>A strategic version of Tic Tac Toe built using Javascript, ReactJs, Mobx and SASS.</i></p>
+<p align="center"><i>A strategic version of Tic Tac Toe built using ReactJs, Mobx, NodeJs and Socket.io</i></p>
 
 <br/><br/>
 
