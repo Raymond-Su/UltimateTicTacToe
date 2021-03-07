@@ -4,7 +4,7 @@
 CWD=$(pwd)
 cd $CWD/client 
 npm install
-npm build
+npm run build
 
 # Build server dependancies
 cd $CWD
