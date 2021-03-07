@@ -1,44 +1,17 @@
 import { makeAutoObservable } from 'mobx';
+
 import {
-  Point,
+  innerBoardInformation,
   Move,
   Player,
-  innerBoardInformation,
+  Point,
   SquareInformation,
   TileInformation,
   TileValue,
   Winner,
   WinResult
 } from '../../types/game';
-
-export const displayTileValue: Record<TileValue | Player, string> = {
-  [TileValue.Cross]: 'X',
-  [TileValue.Circle]: 'O',
-  [TileValue.Destroyed]: '/',
-  [TileValue.Empty]: ''
-};
-
-export const playerToTileValue = (
-  player: Winner | Player,
-  isForFullInnerBoard = false
-): TileValue => {
-  if (isForFullInnerBoard && player === Winner.Draw) {
-    return TileValue.Destroyed;
-  } else if (player === Winner.Cross) {
-    return TileValue.Cross;
-  } else if (player === Winner.Circle) {
-    return TileValue.Circle;
-  } else {
-    return TileValue.Empty;
-  }
-};
-
-const arePointsEqual = (point1: Point, point2: Point): boolean => {
-  if (point1.x === point2.x && point1.y === point2.y) {
-    return true;
-  }
-  return false;
-};
+import { arePointsEqual, playerToTileValue } from '../../utils/game';
 
 class GameStore {
   private board: innerBoardInformation[];
@@ -50,6 +23,7 @@ class GameStore {
     this.currentPlayer = Player.Cross;
     this.moves = [];
     this.applyMoves(moves);
+
     makeAutoObservable(this);
   }
 
@@ -94,10 +68,15 @@ class GameStore {
       affectedBoard ? affectedBoard.tiles : []
     );
   }
+
   restart(): void {
     this.moves = [];
     this.board = this.getInitialInnerBoards();
     this.currentPlayer = Player.Cross;
+  }
+
+  setPlayer(plauer: Player): void {
+    this.currentPlayer = plauer;
   }
 
   get getCurrentActiveBoards(): Point[] {
