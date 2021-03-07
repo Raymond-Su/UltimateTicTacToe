@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "start": "nodemon index.ts",
-    "heroku-prebuild": "npm install"
+    "heroku-prebuild": "npm install --only=dev && npm install"
   },
   "author": "Raymond.su",
   "license": "ISC",
