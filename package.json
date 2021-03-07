@@ -5,8 +5,8 @@
   "main": "index.ts",
   "scripts": {
     "heroku-prebuild": "./herokuBuild.sh",
-    "start": "nodemon index.js",
     "build": "tsc",
+    "start": "nodemon index.js",
     "dev": "nodemon index.ts"
   },
   "author": "Raymond.su",
