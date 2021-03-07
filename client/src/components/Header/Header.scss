@@ -10,21 +10,24 @@
   }
 
   .logo {
-    display: block;
-    flex: none;
+    display: inline-flex;
     float: left;
     font-size: 2em;
     text-decoration: none;
-    margin-top: 10px;
+    margin-top: 5x;
     line-height: normal;
-    align-self: baseline;
+    align-items: center;
+  }
+  .logo-img {
+    width: 2em;
+    height: 2em;
   }
   .logo-name {
     font-family: 'Hammersmith One', sans-serif;
     font-weight: bold;
     font-variant-ligatures: no-common-ligatures;
     -webkit-font-variant-ligatures: no-common-ligatures;
-    padding: 20px 10px;
+    padding: 0px 10px;
 
     &:hover {
       color: black;
