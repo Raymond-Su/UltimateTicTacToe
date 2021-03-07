@@ -1,10 +1,19 @@
 import { Server, Socket } from 'socket.io';
+import { Move, Player } from '../client/src/types/game';
+import { GameState } from '../types/game';
+import {
+  SocketCore,
+  GameSocketClientMessage,
+  GameSocketServerMessage
+} from '../types/socket';
 import { LoggerService } from './LoggerService';
+
 export class SocketServer {
   /**
    * The socket server.
    */
   public ioServer: Server;
+  private games: Record<string, GameState>;
 
   /**
    * Initializes a new instance of the class SocketServer.
@@ -13,44 +22,88 @@ export class SocketServer {
 
   constructor(ioServer: Server) {
     this.ioServer = ioServer;
+    this.games = {};
   }
 
   /**
    * Listen socket
    */
   public watchConnection() {
-    this.ioServer.on('connection', (socket: Socket) => {
-      LoggerService.log('Connected Socket', `Socket connected - ${socket.id}`);
-      if (socket.handshake.headers.referer) {
-        const referer = socket.handshake.headers.referer.split('/');
-        const roomId = referer[referer.length - 1];
+    this.ioServer.on(SocketCore.CONNECTION, (socket: Socket) => {
+      LoggerService.log('Socket', `connected - ${socket.id}`);
 
-        socket.join(roomId);
+      const gameId = socket.handshake.query['gameId'] as string;
+      socket.join(gameId);
 
-        this.subscribe(socket, roomId);
-      }
+      this.handleJoinGame(socket, gameId);
+      this.subscribe(socket, gameId);
     });
   }
 
   /**
    * Subscribes to the socket events.
    * @param socket The socket instance
-   * @param roomId The room the socket is in
+   * @param gameId The room the socket is in
    */
-  private subscribe(socket: Socket, roomId: string) {
-    socket.on('data', (data) => this.onDataHandler(socket, roomId, data));
-    socket.on('error', (error) => this.onErrorHandler(socket, error));
-    socket.on('disconnect', () => this.onDisconnectHandler(socket, roomId));
+  private subscribe(socket: Socket, gameId: string) {
+    socket.on(GameSocketClientMessage.MAKE_MOVE, (move: Move) =>
+      this.onGameMoveMade(gameId, move)
+    );
+    socket.on(SocketCore.ERROR, (error) => this.onErrorHandler(socket, error));
+    socket.on(SocketCore.DISCONNECT, () =>
+      this.onDisconnectHandler(socket, gameId)
+    );
   }
 
   /**
-   * The handler listens to the events emitted by the clients.
+   * handle players joining games. All players should see current state of the board
    * @param socket The socket instance
-   * @param roomId The romom the user is in
-   * @param data The data recieved from the client
+   * @param error The error message
    */
-  private onDataHandler(socket: Socket, roomId: string, data: any) {
-    console.log(data, roomId);
+  private handleJoinGame(socket: Socket, gameId: string) {
+    // Create new game if it doesn't exist
+    if (!this.games.hasOwnProperty(gameId)) {
+      this.games[gameId] = {
+        playerCount: 0,
+        playerX: null,
+        playerO: null,
+        history: []
+      };
+      LoggerService.gameLog(`New Game`, gameId);
+    }
+    // Send current board state to the client
+    socket.emit(
+      GameSocketServerMessage.CURRENT_BOARD,
+      this.games[gameId].history
+    );
+
+    this.games[gameId].playerCount++;
+    if (!this.games[gameId].playerX) {
+      this.games[gameId].playerX = socket.id;
+      socket.emit(GameSocketServerMessage.SET_PLAYER, Player.Cross);
+      LoggerService.gameLog(gameId, `Found player X: ${socket.id}`);
+      return;
+    }
+    if (!this.games[gameId].playerO) {
+      this.games[gameId].playerO = socket.id;
+      socket.emit(GameSocketServerMessage.SET_PLAYER, Player.Circle);
+      LoggerService.gameLog(gameId, `Found player O: ${socket.id}`);
+      return;
+    }
+    socket.emit(GameSocketServerMessage.SET_PLAYER, Player.Spectator);
+  }
+
+  /**
+   * handle players joining games. All players should see current state of the board
+   * @param socket The socket instance
+   * @param error The error message
+   */
+  private onGameMoveMade(gameId: string, move: Move) {
+    LoggerService.gameLog(gameId, `Move made: ${move}`);
+    this.games[gameId].history.push(move);
+
+    // update client with move
+    this.ioServer.to(gameId).emit(GameSocketServerMessage.MOVE_MADE, move);
   }
 
   /**
@@ -66,57 +119,25 @@ export class SocketServer {
    * The handler gets called on socket disconnect.
    * Can be used to close or clean gracefully when required.
    * @param socket The socket instance.
-   * @param roomId The room that the socket is within
+   * @param gameId The room that the socket is within
    */
-  private onDisconnectHandler(socket: Socket, roomId: string) {
-    LoggerService.log(
-      'Disconnect Socket',
-      `Attempting to disconnect ${socket.id}`
-    );
-    if (socket.connected) {
-      socket.leave(roomId);
-      socket.disconnect();
-      LoggerService.log(
-        'Disconnect Socket',
-        `Socket ${socket.id} disconnected`
-      );
+  private onDisconnectHandler(socket: Socket, gameId: string) {
+    if (socket.disconnected) {
+      LoggerService.log('Socket', `Socket ${socket.id} disconnected`);
+    }
+    socket.leave(gameId);
+    if (this.games.hasOwnProperty(gameId)) {
+      this.games[gameId].playerCount--;
+
+      if (this.games[gameId].playerO === socket.id) {
+        this.games[gameId].playerO = null;
+      } else if (this.games[gameId].playerX === socket.id) {
+        this.games[gameId].playerX = null;
+      }
+      if (this.games[gameId].playerCount === 0) {
+        delete this.games[gameId];
+        LoggerService.gameLog(`END game`, gameId);
+      }
     }
   }
 }
-
-// var room = io.adapter.rooms[rand];
-// if (!room.game) {
-//   room.game = {
-//     players: [],
-//     history: []
-//   };
-// }
-// if (room.game.players.length === 0) {
-//   if (Math.random() < 0.5) {
-//     socket.player = 'X';
-//   } else {
-//     socket.player = 'O';
-//   }
-// } else if (room.game.players.indexOf('X') === -1) {
-//   socket.player = 'X';
-// } else if (room.game.players.indexOf('O') === -1) {
-//   socket.player = 'O';
-// } else {
-//   socket.player = null;
-// }
-// if (socket.player) {
-//   room.game.players.push(socket.player);
-// }
-// socket.emit('connection', socket.player, room);
-// io.to(rand).emit('someone connected', room);
-// socket.on('move', function (move) {
-//   room.game.history.push(move);
-//   socket.broadcast.to(rand).emit('move', move);
-// });
-// socket.on('disconnect', function () {
-//   if (socket.player) {
-//     var i = room.game.players.indexOf(socket.player);
-//     room.game.players.splice(i, 1);
-//   }
-//   io.to(rand).emit('someone disconnected', room);
-// });
