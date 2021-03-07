@@ -7,7 +7,7 @@
     "heroku-prebuild": "./herokuBuild.sh",
     "build": "tsc",
     "start": "nodemon index.js",
-    "dev": "nodemon index.ts"
+    "start-local-server": "nodemon index.ts"
   },
   "author": "Raymond.su",
   "license": "ISC",
