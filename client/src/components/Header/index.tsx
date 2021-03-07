@@ -1,9 +1,9 @@
+import './Header.scss';
+
 import classNames from 'classnames';
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { v1 as uuidv1 } from 'uuid';
-
-import './Header.scss';
 
 const Header: FC = () => {
   const [showMenu, setShowMenu] = useState(false);
