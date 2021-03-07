@@ -4,8 +4,9 @@
   "description": "A strategic version of Tic Tac Toe",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon index.js",
     "heroku-prebuild": "./herokuBuild.sh",
+    "start": "nodemon index.js",
+    "build": "tsc",
     "dev": "nodemon index.ts"
   },
   "author": "Raymond.su",
