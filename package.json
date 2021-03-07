@@ -4,7 +4,7 @@
   "description": "A strategic version of Tic Tac Toe",
   "main": "index.ts",
   "scripts": {
-    "start": "nodemon build/index.js",
+    "start": "nodemon index.js",
     "heroku-prebuild": "npm install && tsc",
     "dev": "nodemon index.ts"
   },
