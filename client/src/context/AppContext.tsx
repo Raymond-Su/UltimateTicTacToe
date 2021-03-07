@@ -1,7 +1,8 @@
 import React, { createContext, FC, ReactNode, useContext } from 'react';
-import GameStore from './stores/gameStore';
 
-const AppContext = createContext<GameStore>({} as GameStore);
+import RootStore from './stores/rootStore';
+
+const AppContext = createContext<RootStore>({} as RootStore);
 
 interface AppContextProviderProps {
   children: ReactNode;
@@ -10,9 +11,9 @@ interface AppContextProviderProps {
 const StateProvider: FC<AppContextProviderProps> = ({
   children
 }: AppContextProviderProps) => (
-  <AppContext.Provider value={new GameStore()}>{children}</AppContext.Provider>
+  <AppContext.Provider value={new RootStore()}>{children}</AppContext.Provider>
 );
 
-export const useStateValue = (): GameStore => useContext(AppContext);
+export const useStateValue = (): RootStore => useContext(AppContext);
 
 export default StateProvider;
