@@ -4,7 +4,7 @@
   "description": "A strategic version of Tic Tac Toe",
   "main": "index.ts",
   "scripts": {
-    "heroku-prebuild": "./herokuBuild.sh",
+    "heroku-prebuild": "./preBuild.sh",
     "build": "tsc",
     "start": "nodemon index.js",
     "start-local-server": "nodemon index.ts"
