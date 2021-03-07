@@ -1,1 +1,1 @@
-export const SOCKET_HOST = 'localhost:5000';
+export const SOCKET_HOST_DEV = 'localhost:5000';

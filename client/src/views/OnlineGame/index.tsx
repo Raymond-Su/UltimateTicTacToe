@@ -11,7 +11,7 @@ import MoveHistoryTable from '../../components/MoveHistoryTable';
 import Panel from '../../components/Panel';
 import PanelBody from '../../components/PanelBody';
 import PanelHeading from '../../components/PanelHeading';
-import { SOCKET_HOST } from '../../constants/socket';
+import { SOCKET_HOST_DEV } from '../../constants/socket';
 import { useStateValue } from '../../context/AppContext';
 import { Move, Player, Winner } from '../../types/game';
 import {
@@ -29,9 +29,11 @@ const OnlineGame: FC = () => {
     role != Player.Spectator && game.getCurrentPlayer === role;
 
   useEffect(() => {
-    const socket = io(SOCKET_HOST, {
-      query: { gameId: window.location.pathname.split('/')[2] }
-    });
+    const socketParams = { gameId: window.location.pathname.split('/')[2] };
+    const socket =
+      process.env.NODE_ENV === 'development'
+        ? io(SOCKET_HOST_DEV, { query: socketParams })
+        : io({ query: socketParams });
     socket.on(GameSocketServerMessage.SET_PLAYER, (player: Player) => {
       setRole(player);
     });
