@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
-import classNames from 'classnames';
-
 import './InnerBoard.scss';
+
+import classNames from 'classnames';
+import React, { FC } from 'react';
+
 import { Move, SquareInformation, TileValue } from '../../types/game';
-import { displayTileValue } from '../../context/stores/gameStore';
+import { displayTileValue } from '../../utils/game';
 import Square from '../Square';
 
 interface InnerBoardProps {

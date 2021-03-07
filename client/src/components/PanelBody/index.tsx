@@ -1,5 +1,6 @@
-import React, { FC, ReactNode } from 'react';
 import './PanelBody.scss';
+
+import React, { FC, ReactNode } from 'react';
 
 interface PanelBodyProps {
   children: ReactNode;

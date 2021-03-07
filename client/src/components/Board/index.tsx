@@ -1,10 +1,13 @@
-import React, { FC } from 'react';
-import classNames from 'classnames';
-import { Move, Point, innerBoardInformation } from '../../types/game';
-import InnerBoard from '../InnerBoard';
 import './Board.scss';
 
+import classNames from 'classnames';
+import React, { FC } from 'react';
+
+import { innerBoardInformation,Move, Point } from '../../types/game';
+import InnerBoard from '../InnerBoard';
+
 interface BoardProps {
+  activeGame?: boolean;
   isFinished: boolean;
   newGame: boolean;
   board: innerBoardInformation[];
@@ -13,6 +16,7 @@ interface BoardProps {
 }
 
 const Board: FC<BoardProps> = ({
+  activeGame = true,
   isFinished,
   newGame,
   board,
@@ -35,9 +39,12 @@ const Board: FC<BoardProps> = ({
                 <InnerBoard
                   key={`innerBoard-${row * 3 + col}`}
                   newGame={newGame}
-                  boardActive={activeInnerBoards.some(
-                    (board) => board.x === row && board.y === col
-                  )}
+                  boardActive={
+                    activeGame &&
+                    activeInnerBoards.some(
+                      (board) => board.x === row && board.y === col
+                    )
+                  }
                   boardValue={getInnerBoard(row, col).value}
                   makeMove={makeMove}
                   tiles={getInnerBoard(row, col).tiles}

@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
 import './SelectForm.scss';
+
+import React, { FC } from 'react';
 
 interface SelectFormProps {
   id: string;

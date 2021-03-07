@@ -15,7 +15,8 @@ export enum AIDifficulty {
 
 export enum Player {
   Cross = 0,
-  Circle = 1
+  Circle = 1,
+  Spectator = 2
 }
 
 export enum TileValue {

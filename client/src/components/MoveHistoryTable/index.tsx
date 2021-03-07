@@ -1,6 +1,8 @@
-import React, { FC } from 'react';
-import { Move } from '../../types/game';
 import './MoveHistoryTable.scss';
+
+import React, { FC } from 'react';
+
+import { Move } from '../../types/game';
 
 interface MoveHistoryTableProps {
   moves: Move[];

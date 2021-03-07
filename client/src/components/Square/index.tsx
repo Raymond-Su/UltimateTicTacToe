@@ -1,9 +1,10 @@
-import React, { FC } from 'react';
-import classNames from 'classnames';
-import { TileValue } from '../../types/game';
-import { displayTileValue } from '../../context/stores/gameStore';
-
 import './Square.scss';
+
+import classNames from 'classnames';
+import React, { FC } from 'react';
+
+import { TileValue } from '../../types/game';
+import { displayTileValue } from '../../utils/game';
 
 interface SquareProps {
   isActive: boolean;

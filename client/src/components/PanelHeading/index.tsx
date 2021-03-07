@@ -1,5 +1,6 @@
-import React, { FC, ReactNode } from 'react';
 import './PanelHeading.scss';
+
+import React, { FC, ReactNode } from 'react';
 
 interface PanelHeadingProps {
   children: ReactNode;

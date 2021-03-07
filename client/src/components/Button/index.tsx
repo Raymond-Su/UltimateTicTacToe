@@ -1,6 +1,7 @@
-import React, { FC, ReactNode } from 'react';
-import classNames from 'classnames';
 import './Button.scss';
+
+import classNames from 'classnames';
+import React, { FC, ReactNode } from 'react';
 
 interface ButtonProps {
   id?: string;
