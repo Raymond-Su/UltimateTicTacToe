@@ -4,11 +4,10 @@ import express from 'express';
 import cors from 'cors';
 import Morgan from 'morgan';
 import path from 'path';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 
 import { routes } from './routes';
 import { ResponseError } from './types';
-import { doesNotMatch } from 'node:assert';
 import { SocketServer } from './service/SocketServer';
 import { LoggerService } from './service/LoggerService';
 
