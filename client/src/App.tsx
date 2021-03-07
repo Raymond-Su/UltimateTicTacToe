@@ -1,7 +1,7 @@
-import './Global.css';
+import './Global.scss';
 
 import React, { FC } from 'react';
-import { BrowserRouter as Router, Route,Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Header from './components/Header';
 import StateProvider from './context/AppContext';
