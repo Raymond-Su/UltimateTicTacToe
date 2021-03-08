@@ -16,9 +16,9 @@ export const displayPlayerValue: Record<Player, string> = {
 export const playerToWinner = (player: Player): Winner => {
   switch (player) {
     case Player.Circle:
-      return Winner.Cross;
-    case Player.Cross:
       return Winner.Circle;
+    case Player.Cross:
+      return Winner.Cross;
     default:
       return Winner.None;
   }
