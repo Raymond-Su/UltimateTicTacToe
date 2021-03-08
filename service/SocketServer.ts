@@ -30,7 +30,7 @@ export class SocketServer {
    */
   public watchConnection() {
     this.ioServer.on(SocketCore.CONNECTION, (socket: Socket) => {
-      LoggerService.log('Socket', `connected - ${socket.id}`);
+      LoggerService.log('Socket', `connected ${socket.id}`);
 
       const gameId = socket.handshake.query['gameId'] as string;
       socket.join(gameId);
@@ -141,3 +141,12 @@ export class SocketServer {
     }
   }
 }
+
+export const socketServerConfig =
+  process.env.NODE_ENV === 'development'
+    ? {
+        cors: {
+          origin: 'http://localhost:3000'
+        }
+      }
+    : undefined;

@@ -53,7 +53,7 @@ const OnlineGame: FC = () => {
 
   const renderTitle = () => {
     if (!game.getWinResult.isFinished) {
-      if (game.getMoves.length === 0) {
+      if (game.getMoves.length === 0 && game.getCurrentPlayer === role) {
         return 'Click any Square to start';
       }
       let playerTurn = `${displayPlayerValue[game.getCurrentPlayer]}'s Turn`;

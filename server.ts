@@ -8,7 +8,7 @@ import { Server } from 'socket.io';
 
 import { routes } from './routes';
 import { ResponseError } from './types';
-import { SocketServer } from './service/SocketServer';
+import { SocketServer, socketServerConfig } from './service/SocketServer';
 import { LoggerService } from './service/LoggerService';
 
 const app = express();
@@ -44,13 +44,7 @@ app.use((error: ResponseError, req: express.Request, res: express.Response) => {
 
 //  IO Server
 const httpServer = createServer(app);
-const ioServer = new Server(httpServer, {
-  pingTimeout: 200000,
-  pingInterval: 300000,
-  cors: {
-    origin: 'http://localhost:3000'
-  }
-});
+const ioServer = new Server(httpServer, socketServerConfig);
 
 /**
  * Starts the server.
