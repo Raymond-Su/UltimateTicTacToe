@@ -3,6 +3,20 @@
   "version": "0.1.0",
   "description": "Play ultimate tic tac toe online with a friend or against the computer.",
   "private": true,
+  "scripts": {
+    "start": "NODE_ENV=development react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --coverage",
+    "eject": "react-scripts eject",
+    "lint": "eslint . --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx --quiet",
+    "lint-fix": "eslint .  --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx --fix"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
   "dependencies": {
     "@types/uuid": "^8.3.0",
     "classnames": "^2.2.6",
@@ -34,20 +48,6 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "prettier": "^2.2.1",
     "typescript": "^4.1.3"
-  },
-  "scripts": {
-    "start": "NODE_ENV=development react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint . --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx --quiet",
-    "lint-fix": "eslint .  --ignore-path .gitignore --ext .js,.jsx,.ts,.tsx --fix"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
