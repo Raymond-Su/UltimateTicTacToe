@@ -21,19 +21,39 @@ const difficultyList = Object.keys(AIDifficulty).filter(
 
 const Game: FC = () => {
   const game = useStateValue().gameStore;
-  const [gameMode, setGameMode] = useState<string>(Opponent.AI);
-  const [firstTurn, setFirstTurn] = useState<string>(Opponent.AI);
+  const [gameMode, setGameMode] = useState<string>(Opponent.Player);
+  const [gameStarted, setGameStarted] = useState<boolean>(false);
+  const [firstTurn, setFirstTurn] = useState<string>(Opponent.Player);
   const [aiDifficulty, setAIifficulty] = useState(AIDifficulty.Easy);
 
   const renderTitle = () => {
+    if (!gameStarted) {
+      return 'Game has not started yet ';
+    }
+
     if (!game.getWinResult.isFinished) {
       return game.getMoves.length === 0
         ? 'Click any Square to start'
         : `${displayPlayerValue[game.getCurrentPlayer]}'s Turn`;
+    } else {
+      return game.getWinResult.winningPlayer === Winner.Draw
+        ? 'Draw'
+        : `${displayPlayerValue[game.getWinResult.winningPlayer]} Won`;
     }
-    return game.getWinResult.winningPlayer === Winner.Draw
-      ? 'Draw'
-      : `${displayPlayerValue[game.getWinResult.winningPlayer]} Won`;
+  };
+
+  const handleNewGameClick = () => {
+    if (gameStarted) {
+      game.restart();
+    } else {
+      setGameStarted(true);
+    }
+  };
+
+  const handleGameModeChange = (value: string) => {
+    game.restart();
+    setGameStarted(false);
+    setGameMode(value);
   };
 
   return (
@@ -43,10 +63,10 @@ const Game: FC = () => {
           <PanelHeading>{renderTitle()}</PanelHeading>
           <Board
             newGame={game.getMoves.length === 0}
-            isFinished={game.getWinResult.isFinished}
+            isFinished={game.getWinResult.isFinished || !gameStarted}
             board={game.getBoard}
             activeInnerBoards={game.getCurrentActiveBoards}
-            makeMove={(move) => game.applyMove(move)}
+            makeMove={(move) => gameStarted && game.applyMove(move)}
           />
         </Panel>
       </div>
@@ -58,7 +78,7 @@ const Game: FC = () => {
               id="Opponent"
               labelTitle="Opponent"
               value={gameMode}
-              onSelect={(value) => setGameMode(value)}
+              onSelect={handleGameModeChange}
               options={[
                 [Opponent.Player, 'Play with friend'],
                 [Opponent.AI, 'Play against computer']
@@ -89,8 +109,12 @@ const Game: FC = () => {
                 />
               </>
             )}
-            <Button id="new-game" primary onClick={() => game.restart()}>
-              New Game
+            <Button
+              id="new-game"
+              primary={!gameStarted}
+              onClick={handleNewGameClick}
+            >
+              {!gameStarted ? 'New Game' : 'Restart Game'}
             </Button>
           </PanelBody>
         </Panel>
