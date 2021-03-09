@@ -13,7 +13,7 @@ import PanelHeading from '../../components/PanelHeading';
 import SelectForm from '../../components/SelectForm';
 import { useStateValue } from '../../context/AppContext';
 import { AIDifficulty, Opponent, Winner } from '../../types/game';
-import { displayPlayerValue } from '../../utils/game';
+import { displayPlayerValue } from '../../utils/gameUtils';
 
 const difficultyList = Object.keys(AIDifficulty).filter(
   (k) => typeof AIDifficulty[k as any] === 'number'

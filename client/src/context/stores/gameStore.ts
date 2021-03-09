@@ -11,7 +11,7 @@ import {
   Winner,
   WinResult
 } from '../../types/game';
-import { arePointsEqual, playerToTileValue } from '../../utils/game';
+import { arePointsEqual, playerToTileValue } from '../../utils/gameUtils';
 
 class GameStore {
   private board: innerBoardInformation[];
@@ -75,8 +75,8 @@ class GameStore {
     this.currentPlayer = Player.Cross;
   }
 
-  setPlayer(plauer: Player): void {
-    this.currentPlayer = plauer;
+  setPlayer(player: Player): void {
+    this.currentPlayer = player;
   }
 
   get getCurrentActiveBoards(): Point[] {
@@ -239,7 +239,7 @@ class GameStore {
         isFinished: true,
         winningPlayer: Winner.Circle
       };
-    } else if (boardIsFull) {
+    } else if (boardIsFull && board.length > 0) {
       return {
         isFinished: true,
         winningPlayer: Winner.Draw
