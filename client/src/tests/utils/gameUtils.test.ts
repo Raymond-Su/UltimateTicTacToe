@@ -1,5 +1,9 @@
-import { Player, TileValue, Winner } from '../types/game';
-import { arePointsEqual, playerToTileValue, playerToWinner } from './gameUtils';
+import { Player, TileValue, Winner } from '../../types/game';
+import {
+  arePointsEqual,
+  playerToTileValue,
+  playerToWinner
+} from '../../utils/gameUtils';
 
 describe('playerToTileValue', () => {
   it('should return an empty tile when Winner is Draw', () => {

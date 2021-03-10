@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Square /> Matches the snapshot 1`] = `
+<td
+  className="cell NW"
+  data-testid="game-square"
+  onClick={[MockFunction]}
+>
+  O
+</td>
+`;

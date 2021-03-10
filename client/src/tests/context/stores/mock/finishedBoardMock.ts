@@ -1,4 +1,4 @@
-import { TileValue } from '../../../types/game';
+import { TileValue } from '../../../../types/game';
 
 // this provides two finished boards:
 /*

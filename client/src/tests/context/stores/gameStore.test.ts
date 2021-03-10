@@ -1,5 +1,5 @@
-import { Move, Player, TileValue, Winner } from '../../types/game';
-import GameStore from './gameStore';
+import GameStore from '../../../context/stores/gameStore';
+import { Move, Player, TileValue, Winner } from '../../../types/game';
 import {
   activeBoardsForBoardWithThreeMovesMock,
   boardWithOneMoveMock,
@@ -12,7 +12,7 @@ import {
   movesForDrawFinishedBoardMock,
   movesForUnfinishedBoardMock,
   unfinishedBoardMock
-} from './testHelpers';
+} from './mock';
 
 describe('TicTacToe Game-Engine', () => {
   describe('constructor', () => {
