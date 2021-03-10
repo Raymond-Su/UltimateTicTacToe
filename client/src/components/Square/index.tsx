@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import React, { FC } from 'react';
 
 import { TileValue } from '../../types/game';
-import { displayTileValue } from '../../utils/game';
+import { displayTileValue } from '../../utils/gameUtils';
 
 interface SquareProps {
   isActive: boolean;

@@ -18,7 +18,7 @@ import {
   GameSocketClientMessage,
   GameSocketServerMessage
 } from '../../types/socket';
-import { displayPlayerValue, playerToWinner } from '../../utils/game';
+import { displayPlayerValue, playerToWinner } from '../../utils/gameUtils';
 
 const OnlineGame: FC = () => {
   const game = useStateValue().onlineGameStore;

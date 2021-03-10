@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import React, { FC } from 'react';
 
 import { Move, SquareInformation, TileValue } from '../../types/game';
-import { displayTileValue } from '../../utils/game';
+import { displayTileValue } from '../../utils/gameUtils';
 import Square from '../Square';
 
 interface InnerBoardProps {
