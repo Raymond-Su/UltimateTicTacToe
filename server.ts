@@ -6,7 +6,6 @@ import Morgan from 'morgan';
 import path from 'path';
 import { Server } from 'socket.io';
 
-import { routes } from './routes';
 import { ResponseError } from './types';
 import { SocketServer, socketServerConfig } from './service/SocketServer';
 import { LoggerService } from './service/LoggerService';
@@ -16,9 +15,6 @@ app.use(urlencoded({ extended: true }));
 app.use(json());
 app.use(cors());
 app.use(Morgan('dev'));
-
-// API Route
-app.use('/api/', routes);
 
 // Client
 app.use(express.static(path.join(__dirname, 'client', 'build')));
