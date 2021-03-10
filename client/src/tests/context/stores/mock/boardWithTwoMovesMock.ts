@@ -1,6 +1,6 @@
-import { TileValue } from '../../../types/game';
+import { TileValue } from '../../../../types/game';
 
-export const boardWithThreeMovesMock = [
+export const boardWithTwoMovesMock = [
   {
     value: TileValue.Empty,
     position: {
@@ -385,7 +385,7 @@ export const boardWithThreeMovesMock = [
           x: 1,
           y: 1
         },
-        value: TileValue.Cross
+        value: TileValue.Empty
       },
       {
         boardPosition: {
@@ -975,48 +975,9 @@ export const boardWithThreeMovesMock = [
   }
 ];
 
-export const movesForBoardWithThreeMovesMock = [
-  {
-    boardPosition: {
-      x: 0,
-      y: 0
-    },
-    tilePosition: {
-      x: 0,
-      y: 2
-    },
-    player: 0,
-    moveNumber: 1
-  },
-  {
-    boardPosition: {
-      x: 0,
-      y: 2
-    },
-    tilePosition: {
-      x: 1,
-      y: 0
-    },
-    player: 1,
-    moveNumber: 2
-  },
-  {
-    boardPosition: {
-      x: 1,
-      y: 0
-    },
-    tilePosition: {
-      x: 1,
-      y: 1
-    },
-    player: 0,
-    moveNumber: 3
-  }
-];
-
-export const activeBoardsForBoardWithThreeMovesMock = [
+export const activeBoardsForBoardWithTwoMovesMock = [
   {
     x: 1,
-    y: 1
+    y: 0
   }
 ];

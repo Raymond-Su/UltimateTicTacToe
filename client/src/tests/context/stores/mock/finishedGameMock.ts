@@ -7,7 +7,7 @@
   X - O
 */
 
-import { Move } from '../../../types/game';
+import { Move } from '../../../../types/game';
 
 export const finishedGameMoves: Move[] = [
   {

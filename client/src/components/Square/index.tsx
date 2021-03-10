@@ -7,15 +7,15 @@ import { TileValue } from '../../types/game';
 import { displayTileValue } from '../../utils/gameUtils';
 
 interface SquareProps {
-  isActive: boolean;
-  notationPosition: string;
+  isActive?: boolean;
+  notationPosition?: string;
   tileValue: TileValue;
   makeMove: () => void;
 }
 
 const Square: FC<SquareProps> = ({
-  isActive,
-  notationPosition,
+  isActive = false,
+  notationPosition = '',
   tileValue,
   makeMove
 }: SquareProps) => {
@@ -25,6 +25,7 @@ const Square: FC<SquareProps> = ({
         enabled: isActive && tileValue === TileValue.Empty
       })}
       onClick={makeMove}
+      data-testid="game-square"
     >
       {displayTileValue[tileValue]}
     </td>
