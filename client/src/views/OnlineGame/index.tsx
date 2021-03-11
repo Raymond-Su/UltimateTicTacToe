@@ -1,16 +1,19 @@
-import './OnlineGame.scss';
-
 import { observer } from 'mobx-react-lite';
 import React, { FC, useEffect, useState } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 import Board from '../../components/Board';
-import Container from '../../components/Container';
 import InputFormCopy from '../../components/InputFormCopy';
 import MoveHistoryTable from '../../components/MoveHistoryTable';
-import Panel from '../../components/Panel';
-import PanelBody from '../../components/PanelBody';
-import PanelHeading from '../../components/PanelHeading';
+import {
+  StyledContainer,
+  StyledPanel,
+  StyledPanelBody,
+  StyledPanelHeading,
+  StyledPanelTitle,
+  StyledResizeableLargeColumn,
+  StyledResizeableSmallColumn
+} from '../../components/StyledComponents';
 import { SOCKET_HOST_DEV } from '../../constants/socket';
 import { useStateValue } from '../../context/AppContext';
 import { Move, Player, Winner } from '../../types/game';
@@ -72,10 +75,12 @@ const OnlineGame: FC = () => {
       : 'You Lost!';
   };
   return (
-    <Container>
-      <div className="col-8 col-pull-4">
-        <Panel>
-          <PanelHeading>{renderTitle()}</PanelHeading>
+    <StyledContainer>
+      <StyledResizeableLargeColumn>
+        <StyledPanel>
+          <StyledPanelHeading>
+            <StyledPanelTitle>{renderTitle()}</StyledPanelTitle>
+          </StyledPanelHeading>
           <Board
             activeGame={isPlayerTurn}
             newGame={game.getMoves.length === 0}
@@ -87,29 +92,33 @@ const OnlineGame: FC = () => {
               socket?.emit(GameSocketClientMessage.MAKE_MOVE, move)
             }
           />
-        </Panel>
-      </div>
-      <div className="col-4 col-push-8">
-        <Panel>
-          <PanelHeading>Online Game</PanelHeading>
-          <PanelBody>
+        </StyledPanel>
+      </StyledResizeableLargeColumn>
+      <StyledResizeableSmallColumn>
+        <StyledPanel>
+          <StyledPanelHeading>
+            <StyledPanelTitle>Online Game</StyledPanelTitle>
+          </StyledPanelHeading>
+          <StyledPanelBody>
             <div id="connection-status" className="alert" role="alert"></div>
             <InputFormCopy
               label="Send link to friends"
               text={window.location.toString()}
             />
-          </PanelBody>
-        </Panel>
+          </StyledPanelBody>
+        </StyledPanel>
         {game.getMoves.length !== 0 && (
-          <Panel>
-            <PanelHeading>History</PanelHeading>
-            <PanelBody>
+          <StyledPanel>
+            <StyledPanelHeading>
+              <StyledPanelTitle>History</StyledPanelTitle>
+            </StyledPanelHeading>
+            <StyledPanelBody>
               <MoveHistoryTable moves={game.getMoves} />
-            </PanelBody>
-          </Panel>
+            </StyledPanelBody>
+          </StyledPanel>
         )}
-      </div>
-    </Container>
+      </StyledResizeableSmallColumn>
+    </StyledContainer>
   );
 };
 

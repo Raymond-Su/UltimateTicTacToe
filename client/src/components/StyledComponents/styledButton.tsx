@@ -1,4 +1,10 @@
-.btn {
+import Styled from 'styled-components';
+
+interface styledButtonProps {
+  primary?: boolean;
+}
+
+export const StyledButton = Styled.button<styledButtonProps>`
   display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
@@ -17,10 +23,7 @@
   background-image: none;
   border: 1px solid #ccc;
   border-radius: 4px;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #337ab7;
-  border-color: #2e6da4;
-}
+  color: ${(props) => (props.primary ? '#fff' : 'initial')};
+  background-color: ${(props) => (props.primary ? '#337ab7' : 'initial')};
+  border-color:  ${(props) => (props.primary ? '#2e6da4;' : 'initial')};
+`;
