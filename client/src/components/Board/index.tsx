@@ -3,8 +3,8 @@ import './Board.scss';
 import classNames from 'classnames';
 import React, { FC } from 'react';
 
-import { innerBoardInformation,Move, Point } from '../../types/game';
-import InnerBoard from '../InnerBoard';
+import { innerBoardInformation, Move, Point } from '../../types/game';
+import InnerBoard from './InnerBoard';
 
 interface BoardProps {
   activeGame?: boolean;

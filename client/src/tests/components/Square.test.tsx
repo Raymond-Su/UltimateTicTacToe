@@ -2,7 +2,7 @@ import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { create } from 'react-test-renderer';
 
-import Square from '../../components/Square';
+import Square from '../../components/Board/InnerBoard/Square';
 import { TileValue } from '../../types/game';
 
 const mockFunction = jest.fn();

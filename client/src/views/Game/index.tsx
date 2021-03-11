@@ -1,16 +1,19 @@
-import './Game.scss';
-
 import { observer } from 'mobx-react-lite';
 import React, { FC, useState } from 'react';
 
 import Board from '../../components/Board';
-import Button from '../../components/Button';
-import Container from '../../components/Container';
 import MoveHistoryTable from '../../components/MoveHistoryTable';
-import Panel from '../../components/Panel';
-import PanelBody from '../../components/PanelBody';
-import PanelHeading from '../../components/PanelHeading';
 import SelectForm from '../../components/SelectForm';
+import {
+  StyledButton,
+  StyledContainer,
+  StyledPanel,
+  StyledPanelBody,
+  StyledPanelHeading,
+  StyledPanelTitle,
+  StyledResizeableLargeColumn,
+  StyledResizeableSmallColumn
+} from '../../components/StyledComponents';
 import { useStateValue } from '../../context/AppContext';
 import { AIDifficulty, Opponent, Winner } from '../../types/game';
 import { displayPlayerValue } from '../../utils/gameUtils';
@@ -57,10 +60,12 @@ const Game: FC = () => {
   };
 
   return (
-    <Container>
-      <div className="col-8 col-pull-4">
-        <Panel>
-          <PanelHeading>{renderTitle()}</PanelHeading>
+    <StyledContainer>
+      <StyledResizeableLargeColumn>
+        <StyledPanel>
+          <StyledPanelHeading>
+            <StyledPanelTitle>{renderTitle()}</StyledPanelTitle>
+          </StyledPanelHeading>
           <Board
             newGame={game.getMoves.length === 0}
             isFinished={game.getWinResult.isFinished || !gameStarted}
@@ -68,12 +73,14 @@ const Game: FC = () => {
             activeInnerBoards={game.getCurrentActiveBoards}
             makeMove={(move) => gameStarted && game.applyMove(move)}
           />
-        </Panel>
-      </div>
-      <div className="col-4 col-push-8">
-        <Panel>
-          <PanelHeading>Local Game</PanelHeading>
-          <PanelBody>
+        </StyledPanel>
+      </StyledResizeableLargeColumn>
+      <StyledResizeableSmallColumn>
+        <StyledPanel>
+          <StyledPanelHeading>
+            <StyledPanelTitle>Local Game</StyledPanelTitle>
+          </StyledPanelHeading>
+          <StyledPanelBody>
             <SelectForm
               id="Opponent"
               labelTitle="Opponent"
@@ -109,25 +116,27 @@ const Game: FC = () => {
                 />
               </>
             )}
-            <Button
+            <StyledButton
               id="new-game"
               primary={!gameStarted}
               onClick={handleNewGameClick}
             >
               {!gameStarted ? 'New Game' : 'Restart Game'}
-            </Button>
-          </PanelBody>
-        </Panel>
+            </StyledButton>
+          </StyledPanelBody>
+        </StyledPanel>
         {game.getMoves.length !== 0 && (
-          <Panel>
-            <PanelHeading>History</PanelHeading>
-            <PanelBody>
+          <StyledPanel>
+            <StyledPanelHeading>
+              <StyledPanelTitle>History</StyledPanelTitle>
+            </StyledPanelHeading>
+            <StyledPanelBody>
               <MoveHistoryTable moves={game.getMoves} />
-            </PanelBody>
-          </Panel>
+            </StyledPanelBody>
+          </StyledPanel>
         )}
-      </div>
-    </Container>
+      </StyledResizeableSmallColumn>
+    </StyledContainer>
   );
 };
 

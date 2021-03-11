@@ -1,12 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Button /> Matches the snapshot 1`] = `
+exports[`Styled components <StyledButton /> Matches the snapshot 1`] = `
 <button
-  className="btn btn-primary "
-  data-testid="btn"
+  className="sc-bdfBwQ jCToZW"
   id="snapshot-btn"
   onClick={[MockFunction]}
-  type="button"
 >
   Snapshot Button
 </button>

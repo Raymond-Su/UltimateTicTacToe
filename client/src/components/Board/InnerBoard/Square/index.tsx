@@ -3,8 +3,8 @@ import './Square.scss';
 import classNames from 'classnames';
 import React, { FC } from 'react';
 
-import { TileValue } from '../../types/game';
-import { displayTileValue } from '../../utils/gameUtils';
+import { TileValue } from '../../../../types/game';
+import { displayTileValue } from '../../../../utils/gameUtils';
 
 interface SquareProps {
   isActive?: boolean;
