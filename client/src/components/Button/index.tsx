@@ -20,6 +20,7 @@ const Button: FC<ButtonProps> = ({
     <button
       type="button"
       id={id}
+      data-testid="btn"
       className={classNames('btn', { 'btn-primary ': primary })}
       onClick={onClick}
     >
