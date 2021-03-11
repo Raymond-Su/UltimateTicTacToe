@@ -59,7 +59,20 @@
   "jest": {
     "moduleNameMapper": {
       "\\.(css|less)$": "identity-obj-proxy"
-    }
+    },
+    "coveragePathIgnorePatterns": [
+      "node_modules",
+      "interfaces",
+      "types",
+      "assets",
+      "constants",
+      "tests",
+      "jestGlobalMocks.ts",
+      "AppContext.tsx",
+      ".module.ts",
+      "<rootDir>/src/App.tsx",
+      "<rootDir>/src/index.tsx"
+    ]
   },
   "browserslist": {
     "production": [
