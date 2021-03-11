@@ -28,6 +28,6 @@ jobs:
         working-directory: ./client
 
       # Runs a set of commands using the runners shell
-      - name: run unit tests
-        run: npm run test
+      - name: run unit tests with code coverage
+        run: npm run test-coverage
         working-directory: ./client
